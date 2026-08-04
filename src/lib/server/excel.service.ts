@@ -177,6 +177,7 @@ export class ExcelService {
     this.addVendorReportsSheet(wb, data.transactions);
     this.addCategoryReportsSheet(wb, data.transactions);
     this.addMonthlyReportsSheet(wb, data.transactions);
+    this.addVendorBasedTransactionsSheet(wb, data.transactions);
 
     return await wb.xlsx.writeBuffer();
   }
@@ -327,6 +328,37 @@ export class ExcelService {
       const totalRow = sheet.addRow(['TOTAL', '', '', '', safeNum(totalDebit), safeNum(totalCredit), '']);
       totalRow.font = { bold: true, size: 10, name: 'Calibri' };
       totalRow.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFD9E2F3' } };
+    }
+    this.autoFit(sheet);
+  }
+
+  private addVendorBasedTransactionsSheet(wb: ExcelJS.Workbook, transactions: Transaction[]) {
+    const sheet = wb.addWorksheet('Vendor Based Txns');
+    const groups = this.groupBy(transactions, 'normalizedMerchant');
+    let first = true;
+    for (const [vendor, txns] of groups) {
+      if (!first) sheet.addRow([]);
+      first = false;
+      const hr = sheet.addRow([`${vendor} - ${txns.length} transactions`]);
+      hr.font = { bold: true, size: 12, name: 'Calibri', color: { argb: 'FFFFFFFF' } };
+      hr.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF2F5496' } };
+      hr.height = 22;
+      const cr = sheet.addRow(['Date', 'Description', 'Category', 'Debit', 'Credit', 'Amount', 'Balance', 'Ref No', 'Person']);
+      cr.font = { bold: true, size: 10, name: 'Calibri', color: { argb: 'FFFFFFFF' } };
+      cr.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF4472C4' } };
+      let totalDebit = 0, totalCredit = 0;
+      txns.forEach((t, i) => {
+        if (safeNum(t.debit) > 0) totalDebit += safeNum(t.debit);
+        if (safeNum(t.credit) > 0) totalCredit += safeNum(t.credit);
+        const r = sheet.addRow([fmtDate(t.date), t.description, t.category, safeNum(t.debit), safeNum(t.credit), safeNum(t.amount), safeNum(t.balance), t.referenceNumber, t.person]);
+        r.font = { size: 10, name: 'Calibri' };
+        if ((i + 1) % 2 === 0) r.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFF2F2F2' } };
+        if (safeNum(t.debit) > 0) r.getCell(4).font = { color: { argb: 'FF0000' }, size: 10, name: 'Calibri' };
+        if (safeNum(t.credit) > 0) r.getCell(5).font = { color: { argb: '008000' }, size: 10, name: 'Calibri' };
+      });
+      const tr = sheet.addRow(['TOTAL', '', '', safeNum(totalDebit), safeNum(totalCredit), '', '', '', '']);
+      tr.font = { bold: true, size: 10, name: 'Calibri' };
+      tr.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFD9E2F3' } };
     }
     this.autoFit(sheet);
   }

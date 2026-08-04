@@ -98,6 +98,7 @@ function DetailPage() {
             <Button variant="ghost" size="icon" onClick={() => router.push('/dashboard')}>
               <ArrowLeft className="h-5 w-5" />
             </Button>
+            <img src="/logo.svg" alt="StatementAnalytics" className="w-7 h-7" />
             <div>
               <h1 className="text-2xl font-bold">
                 {type === 'category' && `Category: ${name}`}

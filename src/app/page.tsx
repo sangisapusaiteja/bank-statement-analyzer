@@ -107,16 +107,19 @@ export default function Home() {
     <div className={cn('min-h-screen transition-colors duration-300', darkMode ? 'bg-gray-950 text-gray-100' : 'bg-gray-50 text-gray-900')}>
       <div className="max-w-4xl mx-auto px-4 py-8">
         <header className="flex items-center justify-between mb-8">
-          <div>
-            <h1 className="text-3xl font-bold tracking-tight">StatementAnalytics</h1>
-            <p className={cn('mt-1', darkMode ? 'text-gray-400' : 'text-gray-500')}>
-              Upload PDF statements & get organized reports
-            </p>
+          <div className="flex items-center gap-3">
+            <img src="/logo.svg" alt="StatementAnalytics" className="w-8 h-8" />
+            <div>
+              <h1 className="text-3xl font-bold tracking-tight">StatementAnalytics</h1>
+              <p className={cn('mt-1', darkMode ? 'text-gray-400' : 'text-gray-500')}>
+                Upload PDF statements & get organized reports
+              </p>
+            </div>
           </div>
           <button
             onClick={toggleTheme}
             className={cn(
-              'px-3 py-2 rounded-lg text-sm font-medium transition-colors',
+              'px-3 py-2 rounded-lg text-sm font-medium transition-colors flex items-center',
               darkMode
                 ? 'bg-gray-800 text-gray-300 hover:bg-gray-700'
                 : 'bg-white text-gray-700 hover:bg-gray-100 border border-gray-200'

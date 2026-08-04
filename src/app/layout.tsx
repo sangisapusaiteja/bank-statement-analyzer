@@ -17,6 +17,9 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "StatementAnalytics",
   description: "Upload bank statement PDFs and get organized Excel reports & dashboards",
+  icons: {
+    icon: "/favicon.svg",
+  },
 };
 
 export default function RootLayout({

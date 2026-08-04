@@ -49,6 +49,7 @@ export default function DashboardPage() {
             <Button variant="ghost" size="icon" onClick={() => router.push('/')}>
               <ArrowLeft className="h-5 w-5" />
             </Button>
+            <img src="/logo.svg" alt="StatementAnalytics" className="w-7 h-7" />
             <div>
               <h1 className="text-2xl font-bold">Dashboard</h1>
               <p className="text-muted-foreground text-sm">
